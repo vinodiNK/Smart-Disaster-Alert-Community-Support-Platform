@@ -1,6 +1,7 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { auth, db } from "../services/firebase";
 import "./Register.css";
 
@@ -169,7 +170,7 @@ export default function Register() {
         </form>
 
         <p className="login-link">
-          Already have an account? <a href="/login">Log in here</a>
+          Already have an account? <Link to="/login">Log in here</Link>
         </p>
       </div>
     </div>

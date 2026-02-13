@@ -1,5 +1,6 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { auth } from "../services/firebase";
 import "./Login.css";
 
@@ -108,7 +109,7 @@ export default function Login() {
         </form>
 
         <p className="signup-link">
-          Don't have an account? <a href="/register">Sign up here</a>
+          Don't have an account? <Link to="/register">Sign up here</Link>
         </p>
       </div>
     </div>

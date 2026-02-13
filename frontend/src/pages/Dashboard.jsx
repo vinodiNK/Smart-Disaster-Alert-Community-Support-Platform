@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import AlertMap from "../components/AlertMap";
 import "./Dashboard.css";
 
 export default function Dashboard() {
@@ -6,13 +8,24 @@ export default function Dashboard() {
       
       {/* Sidebar */}
       <div className="sidebar">
-        <h2 className="logo">🌐 Disaster Alert</h2>
+        <h2 className="logo">🌐 Disaster Alert Dashboard</h2>
+
         <ul>
-          <li className="active">Dashboard</li>
-          <li>View Map</li>
-          <li>Report Disaster</li>
-          <li>Request Help</li>
-          <li>Settings</li>
+          <li>
+            <Link to="/">Dashboard</Link>
+          </li>
+
+          <li>
+            <Link to="/map">View Map</Link>
+          </li>
+
+          <li>
+            <Link to="/report">Report Disaster</Link>
+          </li>
+
+          <li>
+            <Link to="/help">Request Help</Link>
+          </li>
         </ul>
       </div>
 
@@ -25,39 +38,31 @@ export default function Dashboard() {
           <span className="notification">🔔</span>
         </div>
 
-        {/* Map Section */}
+        {/* 🌍 Live Map Section */}
         <div className="map-section">
-          <img 
-            src="/images/dashboard-preview.png" 
-            alt="Disaster Map" 
-            className="map-image"
-          />
+          <AlertMap />
         </div>
 
-        {/* Bottom Cards */}
+        {/* Bottom Panels */}
         <div className="bottom-panels">
-          
+
           <div className="panel">
             <h3>Active Alerts</h3>
-            <ul>
-              <li>🔥 Hurricane Delta - Category 3</li>
-              <li>🌲 Wildfire - California North</li>
-              <li>🌊 Flash Flood Warning</li>
-            </ul>
+            <p>All real-time alerts are shown on the map above.</p>
           </div>
 
           <div className="panel">
             <h3>Report Disaster</h3>
-            <input type="text" placeholder="Location" />
-            <textarea placeholder="Description"></textarea>
-            <button className="btn-orange">Submit Report</button>
+            <Link to="/report">
+              <button className="btn-orange">Go to Report Page</button>
+            </Link>
           </div>
 
           <div className="panel">
             <h3>Request Help</h3>
-            <input type="text" placeholder="Help Needed" />
-            <input type="number" placeholder="Number of People" />
-            <button className="btn-red">Send Request</button>
+            <Link to="/help">
+              <button className="btn-red">Request Assistance</button>
+            </Link>
           </div>
 
         </div>

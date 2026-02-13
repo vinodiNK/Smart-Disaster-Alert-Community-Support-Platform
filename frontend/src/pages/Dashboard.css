@@ -29,7 +29,7 @@ body {
 }
 
 .sidebar li {
-    padding: 12px;
+    padding: 22px;
     cursor: pointer;
     border-radius: 8px;
 }
@@ -118,4 +118,14 @@ body {
     width: 100%;
     border-radius: 8px;
     cursor: pointer;
+}
+
+.map-section {
+    height: 60vh;
+    width: 100%;
+}
+
+.leaflet-container {
+    height: 100%;
+    width: 100%;
 }

@@ -59,62 +59,49 @@ export default function Dashboard() {
           <span className="notification">🔔 {alerts.length}</span>
         </div>
 
-        {/* Map Section */}
-        <div className="map-section">
-          <AlertMap alerts={filteredAlerts} />
-        </div>
-
-        {/* Bottom Panels */}
-        <div className="bottom-panels">
-
-          {/* Active Alerts Panel */}
-          <div className="panel">
-            <h3>Active Alerts</h3>
-
-            {/* District Filter Dropdown */}
-            <select
-              value={selectedDistrict}
-              onChange={(e) => setSelectedDistrict(e.target.value)}
-            >
-              {districts.map((district, idx) => (
-                <option key={idx} value={district}>
-                  {district}
-                </option>
-              ))}
-            </select>
-
-            {/* Alert List */}
-            {filteredAlerts.length === 0 ? (
-              <p>No active alerts for this district.</p>
-            ) : (
-              filteredAlerts.map(alert => (
-                <div key={alert.id} className="alert-card">
-                  <h4>{alert.title}</h4>
-                  <p><strong>District:</strong> {alert.district}</p>
-                  <p><strong>Location:</strong> {alert.locationName}</p>
-                  <p>{alert.description}</p>
-                  <p><strong>Status:</strong> {alert.status}</p>
-                </div>
-              ))
-            )}
+        {/* Main Area: map (left) + active alerts (right) */}
+        <div className="main-area">
+          <div className="map-section">
+            <AlertMap alerts={filteredAlerts} />
           </div>
 
-          {/* Report Disaster */}
-          <div className="panel">
-            <h3>Report Disaster</h3>
-            <Link to="/report">
-              <button className="btn-orange">Go to Report Page</button>
-            </Link>
-          </div>
+          <aside className="right-panel">
+            <div className="bottom-panels">
 
-          {/* Request Help */}
-          <div className="panel">
-            <h3>Request Help</h3>
-            <Link to="/help">
-              <button className="btn-red">Request Assistance</button>
-            </Link>
-          </div>
+              {/* Active Alerts Panel */}
+              <div className="panel">
+                <h3>Active Alerts</h3>
 
+                {/* District Filter Dropdown */}
+                <select
+                  value={selectedDistrict}
+                  onChange={(e) => setSelectedDistrict(e.target.value)}
+                >
+                  {districts.map((district, idx) => (
+                    <option key={idx} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Alert List */}
+                {filteredAlerts.length === 0 ? (
+                  <p>No active alerts for this district.</p>
+                ) : (
+                  filteredAlerts.map(alert => (
+                    <div key={alert.id} className="alert-card">
+                      <h4>{alert.title}</h4>
+                      <p><strong>District:</strong> {alert.district}</p>
+                      
+                      <p>{alert.description}</p>
+                      <p><strong>Status:</strong> {alert.status}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+
+            </div>
+          </aside>
         </div>
 
       </div>

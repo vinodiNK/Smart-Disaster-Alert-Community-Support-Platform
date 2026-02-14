@@ -46,6 +46,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 
@@ -56,8 +57,9 @@ body {
     justify-content: space-between;
     align-items: center;
     background-color: #1e293b;
-    padding: 15px 25px;
+    padding: 12px 20px;
     border-bottom: 1px solid #334155;
+    flex-shrink: 0;
 }
 
 .notification {
@@ -69,7 +71,10 @@ body {
 /* Map Section */
 
 .map-section {
-    padding: 20px;
+    flex: 1;
+    padding: 0;
+    min-height: 0;
+    /* allow proper scrolling inside flex */
 }
 
 .map-image {
@@ -80,17 +85,34 @@ body {
 
 /* Bottom Panels */
 
-.bottom-panels {
+.main-area {
     display: flex;
-    gap: 20px;
-    padding: 20px;
+    flex: 1;
+    min-height: 0;
+    /* ensure children can shrink/scroll */
+}
+
+.right-panel {
+    width: 340px;
+    background-color: #0f172a;
+    border-left: 1px solid #334155;
+    padding: 18px;
+    box-sizing: border-box;
+    overflow: auto;
+    flex-shrink: 0;
+}
+
+.bottom-panels {
+    display: block;
+    gap: 12px;
+    padding: 0;
 }
 
 .panel {
-    flex: 1;
     background-color: #0f172a;
-    padding: 20px;
+    padding: 16px;
     border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .panel input,
@@ -121,7 +143,7 @@ body {
 }
 
 .map-section {
-    height: 60vh;
+    height: 100%;
     width: 100%;
 }
 

@@ -74,6 +74,7 @@ export default function Dashboard() {
 
                 {/* District Filter Dropdown */}
                 <select
+                className="district-select"
                   value={selectedDistrict}
                   onChange={(e) => setSelectedDistrict(e.target.value)}
                 >

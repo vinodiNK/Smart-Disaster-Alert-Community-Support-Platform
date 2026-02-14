@@ -1,8 +1,32 @@
+import { collection, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AlertMap from "../components/AlertMap";
+import { db } from "../firebase";
 import "./Dashboard.css";
 
 export default function Dashboard() {
+  const [alerts, setAlerts] = useState([]);
+
+  // 🔥 Fetch alerts from Firestore
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "alerts"),
+      (snapshot) => {
+        const alertData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAlerts(alertData);
+      },
+      (error) => {
+        console.error("Error fetching alerts:", error);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="main-layout">
       
@@ -35,22 +59,39 @@ export default function Dashboard() {
         {/* Top Bar */}
         <div className="topbar">
           <h1>DISASTER ALERT NETWORK</h1>
-          <span className="notification">🔔</span>
+          <span className="notification">
+            🔔 {alerts.length}
+          </span>
         </div>
 
         {/* 🌍 Live Map Section */}
         <div className="map-section">
-          <AlertMap />
+          <AlertMap alerts={alerts} />
         </div>
 
         {/* Bottom Panels */}
         <div className="bottom-panels">
 
+          {/* 🔴 Active Alerts Panel */}
           <div className="panel">
             <h3>Active Alerts</h3>
-            <p>All real-time alerts are shown on the map above.</p>
+
+            {alerts.length === 0 ? (
+              <p>No active alerts.</p>
+            ) : (
+              alerts.map((alert) => (
+                <div key={alert.id} className="alert-card">
+                  <h4>{alert.title}</h4>
+                  <p>{alert.description}</p>
+                  <p>
+                    <strong>Status:</strong> {alert.status}
+                  </p>
+                </div>
+              ))
+            )}
           </div>
 
+          {/* 🟠 Report Disaster */}
           <div className="panel">
             <h3>Report Disaster</h3>
             <Link to="/report">
@@ -58,6 +99,7 @@ export default function Dashboard() {
             </Link>
           </div>
 
+          {/* 🔴 Request Help */}
           <div className="panel">
             <h3>Request Help</h3>
             <Link to="/help">

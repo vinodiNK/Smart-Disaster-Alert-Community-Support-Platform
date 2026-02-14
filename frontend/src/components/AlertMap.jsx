@@ -1,35 +1,12 @@
-import { collection, onSnapshot } from "firebase/firestore";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { db } from "../firebase";
 import "../utils/fixLeafletIcons";
 
-export default function AlertMap() {
-  const [alerts, setAlerts] = useState([]);
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(db, "alerts"),
-      (snapshot) => {
-        const alertData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setAlerts(alertData);
-      },
-      (error) => {
-        console.error("Error fetching alerts:", error);
-      }
-    );
-
-    return () => unsubscribe();
-  }, []);
-
+export default function AlertMap({ alerts }) {
   return (
     <div style={{ height: "100%", width: "100%" }}>
       <MapContainer
-        center={[7.8731, 80.7718]}   // Default center (Sri Lanka example)
+        center={[7.8731, 80.7718]}
         zoom={7}
         scrollWheelZoom={true}
         style={{ height: "100%", width: "100%" }}

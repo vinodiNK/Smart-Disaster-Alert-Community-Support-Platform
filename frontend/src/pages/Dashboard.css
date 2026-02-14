@@ -129,3 +129,11 @@ body {
     height: 100%;
     width: 100%;
 }
+
+.alert-card {
+    background: #1e62a7;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 4px solid red;
+}

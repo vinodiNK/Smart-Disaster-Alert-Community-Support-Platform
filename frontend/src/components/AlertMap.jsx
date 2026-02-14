@@ -32,6 +32,7 @@ export default function AlertMap({ alerts }) {
               <Popup>
                 <div>
                   <h3>{alert.title}</h3>
+                   <p><strong>Location:</strong> {alert.locationName}</p>
                   <p>{alert.description}</p>
                   <p>
                     <strong>Status:</strong> {alert.status}

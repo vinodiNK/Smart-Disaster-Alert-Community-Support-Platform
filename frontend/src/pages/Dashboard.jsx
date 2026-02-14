@@ -82,6 +82,7 @@ export default function Dashboard() {
               alerts.map((alert) => (
                 <div key={alert.id} className="alert-card">
                   <h4>{alert.title}</h4>
+                   <p><strong>Location:</strong> {alert.locationName}</p>
                   <p>{alert.description}</p>
                   <p>
                     <strong>Status:</strong> {alert.status}

@@ -92,6 +92,7 @@ export default function Dashboard() {
                     <div key={alert.id} className="alert-card">
                       <h4>{alert.title}</h4>
                       <p><strong>District:</strong> {alert.district}</p>
+                      <p><strong>Location:</strong> {alert.locationName}</p>
                       
                       <p>{alert.description}</p>
                       <p><strong>Status:</strong> {alert.status}</p>

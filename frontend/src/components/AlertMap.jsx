@@ -6,7 +6,7 @@ export default function AlertMap({ alerts }) {
   return (
     <div style={{ height: "100%", width: "100%" }}>
       <MapContainer
-        center={[7.8731, 80.7718]}
+        center={[7.8731, 80.7718]}   // Sri Lanka center
         zoom={7}
         scrollWheelZoom={true}
         style={{ height: "100%", width: "100%" }}
@@ -18,13 +18,13 @@ export default function AlertMap({ alerts }) {
 
         {alerts
           .filter(
-            (alert) =>
+            alert =>
               alert.latitude &&
               alert.longitude &&
               !isNaN(alert.latitude) &&
               !isNaN(alert.longitude)
           )
-          .map((alert) => (
+          .map(alert => (
             <Marker
               key={alert.id}
               position={[alert.latitude, alert.longitude]}
@@ -32,11 +32,10 @@ export default function AlertMap({ alerts }) {
               <Popup>
                 <div>
                   <h3>{alert.title}</h3>
-                   <p><strong>Location:</strong> {alert.locationName}</p>
+                  <p><strong>District:</strong> {alert.district}</p>
+                  <p><strong>Location:</strong> {alert.locationName}</p>
                   <p>{alert.description}</p>
-                  <p>
-                    <strong>Status:</strong> {alert.status}
-                  </p>
+                  <p><strong>Status:</strong> {alert.status}</p>
                 </div>
               </Popup>
             </Marker>

@@ -1,11 +1,20 @@
+// Login.jsx
+
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { auth } from "../firebase";
+import { Link, useNavigate } from "react-router-dom";
+import { auth, db } from "../firebase";
 import "./Login.css";
 
 export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -16,47 +25,59 @@ export default function Login() {
   };
 
   const validateForm = () => {
-    if (!form.email.trim()) {
-      setError("Email is required");
-      return false;
-    }
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) {
-      setError("Please enter a valid email address");
-      return false;
-    }
-    if (!form.password) {
-      setError("Password is required");
-      return false;
-    }
-    if (form.password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return false;
-    }
+    if (!form.email.trim()) return setError("Email required"), false;
+    if (!form.password) return setError("Password required"), false;
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setLoading(true);
+
     try {
-      const userCred = await signInWithEmailAndPassword(auth, form.email, form.password);
+      // 1️⃣ Login with Firebase Auth
+      const userCred = await signInWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
+
       const token = await userCred.user.getIdToken();
       localStorage.setItem("token", token);
-      window.location.href = "/dashboard";
+
+      // 2️⃣ Get role from Firestore
+      const userDoc = await getDoc(doc(db, "users", userCred.user.uid));
+
+      if (!userDoc.exists()) {
+        setError("User data not found.");
+        return;
+      }
+
+      const userData = userDoc.data();
+      const role = userData.role;
+
+      localStorage.setItem("role", role);
+
+      // 3️⃣ Redirect by role
+      if (role === "Admin") {
+        navigate("/admin-dashboard");
+      } else if (role === "Volunteer") {
+        navigate("/volunteer-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+
     } catch (err) {
       const errorMessages = {
-        "auth/user-not-found": "Email not found. Please check or sign up.",
-        "auth/wrong-password": "Incorrect password. Please try again.",
-        "auth/invalid-email": "Invalid email address.",
-        "auth/user-disabled": "This account has been disabled.",
-        "auth/too-many-requests": "Too many failed attempts. Please try again later.",
+        "auth/user-not-found": "User not found.",
+        "auth/wrong-password": "Wrong password.",
+        "auth/invalid-email": "Invalid email.",
+        "auth/too-many-requests": "Too many attempts.",
       };
-      setError(errorMessages[err.code] || "Login failed. Please try again.");
+
+      setError(errorMessages[err.code] || "Login failed.");
     } finally {
       setLoading(false);
     }
@@ -66,51 +87,45 @@ export default function Login() {
     <div className="login-container">
       <div className="login-card">
         <h1 className="login-title">Smart Disaster Alert</h1>
-        <h2 className="login-subtitle">Login to Your Account</h2>
-        
-        <form onSubmit={handleSubmit} className="login-form">
+        <h2 className="login-subtitle">Login</h2>
+
+        <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email" className="form-label">Email Address</label>
+            <label className="form-label">Email</label>
             <input
-              id="email"
-              name="email"
+              className="form-input"
               type="email"
+              name="email"
+              placeholder="Enter your email"
               value={form.email}
               onChange={handleInputChange}
-              placeholder="Enter your email"
-              className="form-input"
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label className="form-label">Password</label>
             <input
-              id="password"
-              name="password"
+              className="form-input"
               type="password"
+              name="password"
+              placeholder="Enter your password"
               value={form.password}
               onChange={handleInputChange}
-              placeholder="Enter your password"
-              className="form-input"
               disabled={loading}
             />
           </div>
 
-          {error && <div className="error-message">{error}</div>}
+          {error && <p className="error-message">{error}</p>}
 
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={loading}
-          >
+          <button className="login-button" type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="signup-link">
-          Don't have an account? <Link to="/register">Sign up here</Link>
-        </p>
+        <div className="signup-link">
+          Don't have an account? <Link to="/register">Register</Link>
+        </div>
       </div>
     </div>
   );

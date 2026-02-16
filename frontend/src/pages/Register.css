@@ -110,6 +110,17 @@
     cursor: not-allowed;
 }
 
+.success-message {
+    padding: 0.75rem 1rem;
+    background-color: #efe;
+    color: #3c3;
+    border-radius: 6px;
+    border-left: 4px solid #3c3;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 500;
+}
+
 .login-link {
     margin: 1rem 0 0 0;
     text-align: center;
@@ -253,6 +264,11 @@
         background-color: #3a1a1a;
         color: #ff6b6b;
         border-left-color: #ff6b6b;
+    }
+    .success-message {
+        background-color: #1a3a1a;
+        color: #6bff6b;
+        border-left-color: #6bff6b;
     }
     .login-link {
         color: #999;

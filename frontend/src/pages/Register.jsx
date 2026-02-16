@@ -3,13 +3,11 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { auth, db } from "../firebase";
 import "./Register.css";
 
 export default function Register() {
-  const navigate = useNavigate();
-
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -19,12 +17,14 @@ export default function Register() {
   });
 
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
     setError("");
+    setSuccess("");
   };
 
   const validateForm = () => {
@@ -70,14 +70,18 @@ export default function Register() {
       localStorage.setItem("token", token);
       localStorage.setItem("role", form.role);
 
-      // 4️⃣ Redirect based on role
-      if (form.role === "Admin") {
-        navigate("/admin-dashboard");
-      } else if (form.role === "Volunteer") {
-        navigate("/volunteer-dashboard");
-      } else {
-        navigate("/dashboard");
-      }
+      // 4️⃣ Show success message
+      setSuccess("Registration successful!");
+      setError("");
+
+      // 5️⃣ Clear form
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "User",
+      });
 
     } catch (err) {
       const errorMessages = {
@@ -168,6 +172,7 @@ export default function Register() {
           </div>
 
           {error && <p className="error-message">{error}</p>}
+          {success && <p className="success-message">{success}</p>}
 
           <button className="register-button" type="submit" disabled={loading}>
             {loading ? "Creating..." : "Register"}

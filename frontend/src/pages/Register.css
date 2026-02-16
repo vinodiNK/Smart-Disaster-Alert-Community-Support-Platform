@@ -129,6 +129,82 @@
     text-decoration: underline;
 }
 
+.form-select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-select:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.register-title {
+    margin: 0 0 0.5rem 0;
+    color: #667eea;
+    font-size: 1.8rem;
+    text-align: center;
+    font-weight: 700;
+}
+
+.register-subtitle {
+    margin: 0 0 2rem 0;
+    color: #666;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 400;
+}
+
+
+/* Loading state */
+
+.register-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 0.9;
+    }
+    100% {
+        opacity: 0.7;
+    }
+}
+
+
+/* Responsive styles */
+
+@media (max-width: 600px) {
+    .register-card {
+        padding: 1.5rem;
+    }
+    .register-title {
+        font-size: 1.5rem;
+    }
+    .register-form {
+        gap: 1rem;
+    }
+}
+
 
 /* Dark theme support */
 
@@ -160,6 +236,23 @@
     }
     .form-input:disabled {
         background-color: #1a1a1a;
+    }
+    .form-select {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+    .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+    .form-select:disabled {
+        background-color: #1a1a1a;
+    }
+    .error-message {
+        background-color: #3a1a1a;
+        color: #ff6b6b;
+        border-left-color: #ff6b6b;
     }
     .login-link {
         color: #999;

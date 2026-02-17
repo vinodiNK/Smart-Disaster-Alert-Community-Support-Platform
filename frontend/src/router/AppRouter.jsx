@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import AdminDashboard from "../pages/AdminDashboard";
 import Dashboard from "../pages/Dashboard";
 import Help from "../pages/Help";
 import Login from "../pages/Login";
@@ -17,6 +18,7 @@ export default function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
         <Route path="/report" element={<Report />} />
         <Route path="/help" element={<Help />} /> 

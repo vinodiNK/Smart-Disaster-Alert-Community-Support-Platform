@@ -54,6 +54,63 @@
     margin-bottom: 0.25rem;
 }
 
+.report-select,
+.report-input {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e7ff;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+.report-select:focus,
+.report-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.report-select:disabled,
+.report-input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.size-options,
+.location-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #333;
+    transition: color 0.2s ease;
+}
+
+.radio-label input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.75rem;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.radio-label:hover {
+    color: #667eea;
+}
+
+.radio-label input[type="radio"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 .report-textarea {
     padding: 1rem;
     border: 2px solid #e0e7ff;

@@ -5,13 +5,49 @@ import "./Report.css";
 
 export default function Report() {
   const [desc, setDesc] = useState("");
+  const [disasterType, setDisasterType] = useState("");
+  const [locationMode, setLocationMode] = useState("current");
+  const [customLocation, setCustomLocation] = useState("");
+  const [disasterSize, setDisasterSize] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
 
+  const disasterTypes = [
+    "Flood",
+    "Earthquake",
+    "Fire",
+    "Wildfire",
+    "Landslide",
+    "Hurricane",
+    "Tornado",
+    "Cyclone",
+    "Tsunami",
+    "Storm",
+    "Volcanic Eruption",
+    "Drought",
+    "Snowstorm",
+    "Hailstorm",
+    "Building Collapse",
+    "Road Accident",
+    "Other"
+  ];
+
   const submit = async () => {
     if (!desc.trim()) {
       setError("Please describe the disaster");
+      return;
+    }
+    if (!disasterType) {
+      setError("Please select a disaster type");
+      return;
+    }
+    if (!disasterSize) {
+      setError("Please select disaster size");
+      return;
+    }
+    if (locationMode === "custom" && !customLocation.trim()) {
+      setError("Please enter a location");
       return;
     }
 
@@ -22,18 +58,27 @@ export default function Report() {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         try {
-          await addDoc(collection(db, "reports"), {
+          const reportData = {
             description: desc,
+            disasterType: disasterType,
+            disasterSize: disasterSize,
             location: {
               lat: pos.coords.latitude,
               lng: pos.coords.longitude
             },
+            customLocationName: locationMode === "custom" ? customLocation : null,
             status: "pending",
             createdAt: serverTimestamp()
-          });
+          };
+
+          await addDoc(collection(db, "reports"), reportData);
 
           setMessage("Report sent successfully!");
           setDesc("");
+          setDisasterType("");
+          setDisasterSize("");
+          setLocationMode("current");
+          setCustomLocation("");
           setTimeout(() => setMessage(null), 3000);
 
         } catch (err) {
@@ -53,6 +98,10 @@ export default function Report() {
 
   const reset = () => {
     setDesc("");
+    setDisasterType("");
+    setDisasterSize("");
+    setLocationMode("current");
+    setCustomLocation("");
     setError(null);
     setMessage(null);
   };
@@ -70,10 +119,78 @@ export default function Report() {
 
         <form className="report-form" onSubmit={(e) => { e.preventDefault(); submit(); }}>
           <div className="form-group">
-            <label className="form-label">Disaster Description</label>
+            <label className="form-label">Disaster Type *</label>
+            <select
+              className="report-select"
+              value={disasterType}
+              onChange={(e) => setDisasterType(e.target.value)}
+              disabled={loading}
+            >
+              <option value="">Select disaster type...</option>
+              {disasterTypes.map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Disaster Size *</label>
+            <select
+              className="report-select"
+              value={disasterSize}
+              onChange={(e) => setDisasterSize(e.target.value)}
+              disabled={loading}
+            >
+              <option value="">Select disaster size...</option>
+              {["Small", "Medium", "High"].map((size) => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Location *</label>
+            <div className="location-options">
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="location"
+                  value="current"
+                  checked={locationMode === "current"}
+                  onChange={(e) => setLocationMode(e.target.value)}
+                  disabled={loading}
+                />
+                <span>Use Current Location</span>
+              </label>
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="location"
+                  value="custom"
+                  checked={locationMode === "custom"}
+                  onChange={(e) => setLocationMode(e.target.value)}
+                  disabled={loading}
+                />
+                <span>Add Location</span>
+              </label>
+            </div>
+            {locationMode === "custom" && (
+              <input
+                type="text"
+                className="report-input"
+                placeholder="Enter location name (e.g., Downtown, Main St)"
+                value={customLocation}
+                onChange={(e) => setCustomLocation(e.target.value)}
+                disabled={loading}
+              />
+            )}
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Disaster Description *</label>
             <textarea
               className="report-textarea"
-              placeholder="Describe the disaster situation, including type (flood, earthquake, fire, etc.), affected area, and severity..."
+              placeholder="Describe the disaster situation, including affected area and additional details..."
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               disabled={loading}
@@ -81,7 +198,7 @@ export default function Report() {
           </div>
 
           <div className="location-info">
-            📍 Your location will be automatically captured and sent with the report
+            📍 Your precise location will be automatically captured and sent with the report
           </div>
 
           <div className="button-group">

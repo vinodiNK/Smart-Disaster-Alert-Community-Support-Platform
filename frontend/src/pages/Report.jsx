@@ -1,5 +1,6 @@
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useState } from "react";
-import api from "../services/api";
+import { db } from "../firebase";
 import "./Report.css";
 
 export default function Report() {
@@ -21,16 +22,20 @@ export default function Report() {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         try {
-          await api.post("/reports", {
+          await addDoc(collection(db, "reports"), {
             description: desc,
             location: {
               lat: pos.coords.latitude,
               lng: pos.coords.longitude
-            }
+            },
+            status: "pending",
+            createdAt: serverTimestamp()
           });
+
           setMessage("Report sent successfully!");
           setDesc("");
           setTimeout(() => setMessage(null), 3000);
+
         } catch (err) {
           setError("Failed to send report. Please try again.");
           console.error(err);
@@ -80,20 +85,10 @@ export default function Report() {
           </div>
 
           <div className="button-group">
-            <button
-              type="button"
-              className="cancel-btn"
-              onClick={reset}
-              disabled={loading}
-            >
+            <button type="button" className="cancel-btn" onClick={reset} disabled={loading}>
               Clear
             </button>
-            <button
-              type="submit"
-              className="submit-btn"
-              onClick={submit}
-              disabled={loading}
-            >
+            <button type="submit" className="submit-btn" disabled={loading}>
               {loading ? "Sending..." : "Send Report"}
             </button>
           </div>

@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
+
   return (
     <div className="admin-dashboard">
       <h2 className="dashboard-title">🌍 Admin Dashboard</h2>
@@ -42,7 +45,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Recent Reports */}
-          <div className="card">
+          <div className="card" onClick={() => navigate("/verify-reports")}>
             <h3>Recent Reports</h3>
             <ul>
               <li>

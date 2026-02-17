@@ -115,6 +115,7 @@
     box-shadow: 0 4px 15px rgba(154, 109, 109, 0.08);
     transition: all 0.3s ease;
     border: 2px solid #f0f0f0;
+    cursor: pointer;
 }
 
 .card:hover {

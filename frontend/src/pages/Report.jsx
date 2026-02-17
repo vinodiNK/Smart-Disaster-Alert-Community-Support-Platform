@@ -6,8 +6,7 @@ import "./Report.css";
 export default function Report() {
   const [desc, setDesc] = useState("");
   const [disasterType, setDisasterType] = useState("");
-  const [locationMode, setLocationMode] = useState("current");
-  const [customLocation, setCustomLocation] = useState("");
+  const [location, setLocation] = useState("");
   const [disasterSize, setDisasterSize] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -46,7 +45,7 @@ export default function Report() {
       setError("Please select disaster size");
       return;
     }
-    if (locationMode === "custom" && !customLocation.trim()) {
+    if (!location.trim()) {
       setError("Please enter a location");
       return;
     }
@@ -62,11 +61,11 @@ export default function Report() {
             description: desc,
             disasterType: disasterType,
             disasterSize: disasterSize,
-            location: {
+            locationName: location,
+            coordinates: {
               lat: pos.coords.latitude,
               lng: pos.coords.longitude
             },
-            customLocationName: locationMode === "custom" ? customLocation : null,
             status: "pending",
             createdAt: serverTimestamp()
           };
@@ -77,8 +76,7 @@ export default function Report() {
           setDesc("");
           setDisasterType("");
           setDisasterSize("");
-          setLocationMode("current");
-          setCustomLocation("");
+          setLocation("");
           setTimeout(() => setMessage(null), 3000);
 
         } catch (err) {
@@ -100,8 +98,7 @@ export default function Report() {
     setDesc("");
     setDisasterType("");
     setDisasterSize("");
-    setLocationMode("current");
-    setCustomLocation("");
+    setLocation("");
     setError(null);
     setMessage(null);
   };
@@ -150,40 +147,14 @@ export default function Report() {
 
           <div className="form-group">
             <label className="form-label">Location *</label>
-            <div className="location-options">
-              <label className="radio-label">
-                <input
-                  type="radio"
-                  name="location"
-                  value="current"
-                  checked={locationMode === "current"}
-                  onChange={(e) => setLocationMode(e.target.value)}
-                  disabled={loading}
-                />
-                <span>Use Current Location</span>
-              </label>
-              <label className="radio-label">
-                <input
-                  type="radio"
-                  name="location"
-                  value="custom"
-                  checked={locationMode === "custom"}
-                  onChange={(e) => setLocationMode(e.target.value)}
-                  disabled={loading}
-                />
-                <span>Add Location</span>
-              </label>
-            </div>
-            {locationMode === "custom" && (
-              <input
-                type="text"
-                className="report-input"
-                placeholder="Enter location name (e.g., Downtown, Main St)"
-                value={customLocation}
-                onChange={(e) => setCustomLocation(e.target.value)}
-                disabled={loading}
-              />
-            )}
+            <input
+              type="text"
+              className="report-input"
+              placeholder="Enter location name (e.g., Downtown, Main St)"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              disabled={loading}
+            />
           </div>
 
           <div className="form-group">
